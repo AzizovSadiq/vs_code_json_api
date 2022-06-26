@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:json_api_learn/home.dart';
 import 'package:json_api_learn/main.dart';
+import 'package:json_api_learn/resource_model/view/resource_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,9 +17,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'JsonPlaceholder'),
+      home:  ResourceView(),
     );
   }
 }
