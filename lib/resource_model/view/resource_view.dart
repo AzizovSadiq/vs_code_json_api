@@ -1,5 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:json_api_learn/resource_model/service/resource_service.dart';
 import 'package:json_api_learn/resource_model/view_model/resource_view_model.dart';
+import 'package:json_api_learn/resource_model/view_model/resource_view_provider_model.dart';
+import 'package:provider/provider.dart';
 class ResourceView extends StatefulWidget {
   ResourceView({Key? key}) : super(key: key);
 
@@ -7,34 +11,36 @@ class ResourceView extends StatefulWidget {
   State<ResourceView> createState() => _ResourceViewState();
 }
 
-class _ResourceViewState extends ResourceViewModel {
+// class _ResourceViewState extends ResourceViewModel {
+class _ResourceViewState extends State<ResourceView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ChangeNotifierProvider(create: ((context) => ResourceViewProviderModel(
+      ResourceService(Dio(BaseOptions(baseUrl: 'https://jsonplaceholder.typicode.com'))))),
+      builder: (context,child){
+        return  Scaffold(
       backgroundColor: Colors.blueGrey[200],
       appBar:AppBar(
         centerTitle: true,
-        title: isLoading ? const CircularProgressIndicator(color: Colors.amber): null,
+        title:context.watch<ResourceViewProviderModel>().isLoading ? const CircularProgressIndicator(color: Colors.amber): null,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: _PostList(),
-      )
-    );
-  }
-
-  ListView _PostList() {
-    return ListView.builder(
-        itemCount: resource?.length ?? 0,
+      body:ListView.builder(
+        itemCount:context.watch<ResourceViewProviderModel>().resource?.length ?? 0,
         itemBuilder: (context,index){
         return Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: ListTile(
-            title: Text(resource?[index].title ?? ''),
-            subtitle:Text(resource?[index].body ?? ''),
-            leading: Text((resource?[index].id ?? '').toString()),
+            title: Text(context.watch<ResourceViewProviderModel>().resource?[index].title ?? ''),
+            subtitle:Text(context.watch<ResourceViewProviderModel>().resource?[index].body ?? ''),
+            leading: Text((context.watch<ResourceViewProviderModel>().resource?[index].id ?? '').toString()),
           ),
         );
-      });
+      })
+    );
+      },
+      );
+   
   }
+
+  
 }
