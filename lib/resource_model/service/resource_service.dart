@@ -19,24 +19,32 @@ class ResourceService extends IResourceService{
 
   @override
   Future<List<ResourceModel>?> fetchResourcePost()async {
-   final responce = await dio.get('/posts');
+   try {
+     final responce = await dio.get('/posts');
    if(responce.statusCode == HttpStatus.ok){
     final result = responce.data;
     if(result is List){
       return result.map((e) => ResourceModel.fromJson(e)).toList();
     }
    }
+   }on DioError catch (error) {
+     print(error);
+   }
    return null;
   }
   
   @override
   Future<List<ResourceCommentModel>?> fetchCommentPost(int postId) async{
-    final responce =await dio.get('/comments',queryParameters: {'postId':postId});
+    try {
+      final responce =await dio.get('/comments',queryParameters: {'postId':postId});
     if(responce.statusCode == HttpStatus.ok){
       final result = responce.data;
       if(result is List){
         return result.map((e) => ResourceCommentModel.fromJson(e)).toList();
       }
+    }
+    } on DioError catch (error) {
+      print(error);
     }
     return null;
   }
