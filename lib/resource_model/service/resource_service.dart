@@ -12,6 +12,7 @@ abstract class IResourceService{
 
   Future<List<ResourceModel>?> fetchResourcePost();
   Future<List<ResourceCommentModel>?> fetchCommentPost(int postId);
+  
 }
 
 class ResourceService extends IResourceService{
@@ -48,4 +49,5 @@ class ResourceService extends IResourceService{
     }
     return null;
   }
+  
 }
